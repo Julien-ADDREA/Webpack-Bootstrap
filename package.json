@@ -4,8 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "build:development": "webpack --watch",
-        "build:production": "cross-env NODE_ENV=production webpack"
+        "build:development": "webpack --watch --progress",
+        "build:production": "cross-env NODE_ENV=production node node_modules/webpack/bin/webpack --progress"
     },
     "author": "",
     "license": "ISC",
