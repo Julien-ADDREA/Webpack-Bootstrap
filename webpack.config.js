@@ -1,8 +1,8 @@
 // Imports
-const path						= require('path');
-const MiniCssExtractPlugin		= require('mini-css-extract-plugin');
-const { CleanWebpackPlugin }	= require('clean-webpack-plugin');
-const webpack					= require('webpack');
+const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const webpack = require('webpack');
 
 // Webpack : Config
 let config = {};
@@ -25,7 +25,9 @@ config.output = {
 config.mode = process.env.NODE_ENV === 'production' ? 'production' : 'development';
 
 // Webpack : Devtool
-config.devtool = process.env.NODE_ENV === 'production' ? 'source-map' : 'cheap-module-eval-source-map';
+if (config.mode === 'development') {
+	config.devtool = 'eval-source-map';
+}
 
 // Webpack : Module
 config.module = {
@@ -40,7 +42,7 @@ config.module = {
 		{
 			test: /\.s[ac]ss$/i,
 			use: [
-				process.env.NODE_ENV === 'production' ? MiniCssExtractPlugin.loader : 'style-loader',
+				config.mode === 'production' ? MiniCssExtractPlugin.loader : 'style-loader',
 				'css-loader',
 				{
 					loader: 'sass-loader',
@@ -76,13 +78,11 @@ config.plugins = [
 		jQuery: 'jquery'
 	})
 ];
-if (process.env.NODE_ENV === 'production') {
-	config.plugins.push(
-		new MiniCssExtractPlugin({
-			filename: 'app.bundle.css',
-			chunkFilename: 'app.[id].chunk.css'
-		})
-	);
+if (config.mode === 'production') {
+	config.plugins.push(new MiniCssExtractPlugin({
+		filename: 'app.bundle.css',
+		chunkFilename: 'app.[id].chunk.css'
+	}));
 }
 
 module.exports = config;
